@@ -138,13 +138,13 @@ class BaseEnsemble(object):
         
         cov_prob = self.coverage_probability(X,y)
         #print('coverage Probability is: {}'.format(cov_prob))
-        err_var_corr = self.error_uncertainty_correlation(X,y) 
+        err_var_corr = self.error_uncertainty_correlation(X,y)[0]
         #print('correlation of error and uncertainty is: {}'.format(err_var_corr)) #0 is the coefficient
-        y_uncertainty_pred = self.y_predicts_uncertainty(X,y)
+        y_uncertainty_pred = self.y_predicts_uncertainty(X,y)[0]
         #print('correlation of target value and uncertainty is: {}'.format(y_uncertainty_pred)) #0 is the coefficient
-        y_predicts_error = self.y_predicts_error(X,y)
+        y_predicts_error = self.y_predicts_error(X,y)[0]
         #print('correlation of target value and error is: {}'.format(y_uncertainty_pred)) #0 is the coefficient
-        target_error_normalcy = self.error_target_normalcy(X,y)
+        target_error_normalcy = self.error_target_normalcy(X,y)[0]
         #print('error-target normalcy is {}'.format(target_error_normalicy))
         
         return {'rsme':rsme,
@@ -174,7 +174,7 @@ class RegressionEnsemble(BaseEnsemble):
     def fit(self, X_train,y_train):
         for i in range(self.num_models):
             try:
-                new_regressor = self.model_type(random_state=i)#random_state=self.seed+i)
+                new_regressor = self.model_type(random_state=self.seed + i)#random_state=self.seed+i)
             except:
                 new_regressor = self.model_type()#random_state=self.seed+i)
 
