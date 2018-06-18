@@ -45,12 +45,12 @@ class BaseEnsemble(object):
         plt.legend()
         plt.show()
         
-    def mutli_dimenstional_scatterplot(self,X_test,y_test,X=None,y=None):
+    def mutli_dimenstional_scatterplot(self,X_test,y_test,X=None,y=None,figsize=(20,50)):
         
         y_hat,std = self.predict(X_test,std=True)
         
         #plt.rcParams["figure.figsize"] = (20,20)
-        plt.figure(figsize=(20,50))
+        plt.figure(figsize=figsize)
         #plt.scatter(X[:,5],y)
 
         num_features = len(X_test.T)
@@ -150,8 +150,8 @@ class BaseEnsemble(object):
         return {'rsme':rsme,
                 'coverage probability':cov_prob,
                'correlation between error and variance':err_var_corr,
-               'predictive power of y on the uncertainty':y_uncertainty_pred,
-               'predictive power of y on the error': y_predicts_error,
+               #'predictive power of y on the uncertainty':y_uncertainty_pred,
+               #'predictive power of y on the error': y_predicts_error,
                'error normalcy':target_error_normalcy}
 
         
@@ -222,7 +222,7 @@ class BootstrapEnsemble(RegressionEnsemble, BaseEnsemble):
         self.keep_p = keep_p or 0.7
         
     def fit(self,X_train,y_train):
-        print(X_train.size,y_train.size)
+        #print(X_train.size,y_train.size)
         for i in range(self.num_models):
             new_regressor = self.model_type()
             X_new, throwaway1, y_new ,throwaway2 = train_test_split(X_train, y_train, test_size=self.keep_p, random_state=42+i,shuffle=True)
