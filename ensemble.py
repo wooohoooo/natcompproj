@@ -79,7 +79,7 @@ class BaseEnsemble(object):
     def coverage_probability(self,X, y):
         
         y_hat,std = self.predict(X,std=True) 
-        print(y_hat.shape,std.shape,y.shape)
+        #print(y_hat.shape,std.shape,y.shape)
 
         CP = 0
         for pred, s, target in zip(y_hat, std, y):
@@ -112,17 +112,47 @@ class BaseEnsemble(object):
         
         correlation = scipy.stats.pearsonr(prediction.flatten(),y.flatten())
         return correlation
+    
+    
+    def error_target_normalcy(self,X,y):
+        scipy.stats.normaltest
+        
+        
+        prediction,variance = self.predict(X,std=True)
+        
+        error = (prediction - y)**2
+        normalcy =  scipy.stats.normaltest(error.flatten())
+
+        #np.correlate(error.flatten(),variance.flatten())
+        return normalcy
+    
+    def compute_rsme(self,X,y):
+        y_hat = self.predict(X,False)
+        return np.sqrt(np.mean((y_hat - y)**2))
+
+    
     #eval meta
     def self_evaluate(self,X,y):
         
+        rsme = self.compute_rsme(X,y)
+        
         cov_prob = self.coverage_probability(X,y)
-        print('coverage Probability is: {}'.format(cov_prob))
+        #print('coverage Probability is: {}'.format(cov_prob))
         err_var_corr = self.error_uncertainty_correlation(X,y) 
-        print('correlation of error and uncertainty is: {}'.format(err_var_corr)) #0 is the coefficient
+        #print('correlation of error and uncertainty is: {}'.format(err_var_corr)) #0 is the coefficient
         y_uncertainty_pred = self.y_predicts_uncertainty(X,y)
-        print('correlation of target value and uncertainty is: {}'.format(y_uncertainty_pred)) #0 is the coefficient
+        #print('correlation of target value and uncertainty is: {}'.format(y_uncertainty_pred)) #0 is the coefficient
         y_predicts_error = self.y_predicts_error(X,y)
-        print('correlation of target value and error is: {}'.format(y_uncertainty_pred)) #0 is the coefficient
+        #print('correlation of target value and error is: {}'.format(y_uncertainty_pred)) #0 is the coefficient
+        target_error_normalcy = self.error_target_normalcy(X,y)
+        #print('error-target normalcy is {}'.format(target_error_normalicy))
+        
+        return {'rsme':rsme,
+                'coverage probability':cov_prob,
+               'correlation between error and variance':err_var_corr,
+               'predictive power of y on the uncertainty':y_uncertainty_pred,
+               'predictive power of y on the error': y_predicts_error,
+               'error normalcy':target_error_normalcy}
 
         
         
