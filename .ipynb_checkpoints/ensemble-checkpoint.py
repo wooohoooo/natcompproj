@@ -198,11 +198,33 @@ class RegressionEnsemble(BaseEnsemble):
             
         
     
+class SubspaceEnsemble(RegressionEnsemble,BaseEnsemble):
+    def __init__(self,
+                num_models=None,
+                model_type = None,
+                seed=None,
+                num_drop_dimensions=None,):
+    
+        super().__init__(num_models=num_models,
+            model_type=model_type,
+            seed = seed)
+        self.num_drop_dimensions = num_drop_dimensions or 1
+        
+    def fit(self,X_train,y_train):
+        
+        for i in range(self.num_models):
+            idx = np.random.choice(X_train.shape[0], X_train.shape[1]-self.num_drop_dimensions, replace=False)
 
-      
-    
-    
-    
+            X_new = X_train[idx]
+            y_new = y_train[idx]
+            
+            new_regressor = self.model_type()
+            new_regressor.fit(X_new,y_new)
+            self.regressor_list.append(new_regressor)
+
+
+
+
     
 class BootstrapEnsemble(RegressionEnsemble, BaseEnsemble):
     """essentially a regression ensemble, except during the fitting part,
