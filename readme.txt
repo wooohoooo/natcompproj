@@ -10,5 +10,10 @@ Hi!
 
 
 
-x. helpers.py so far only contains a shuffling mechanism that isn't actually used.
-
+necessary packages:
+scikit learn
+pandas
+numpy
+matplotlib
+importlib
+warnings
