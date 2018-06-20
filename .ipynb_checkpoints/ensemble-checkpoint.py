@@ -27,7 +27,7 @@ class BaseEnsemble(object):
 		plt.hlines(y=0,xmin=0,xmax=50)
 		plt.legend()
 		plt.show()
-	def scatterplot(self,X_test,X=None,y=None):
+	def scatterplot(self,X_test,X=None,y=None,title=None):
 		if y is not None and X is not None:
 			plt.scatter(X,y,s=20, edgecolor="black",
 				c="darkorange", label="data")
@@ -47,7 +47,10 @@ class BaseEnsemble(object):
 		#        c="darkorange", label="prediction")
 		plt.xlabel("data")
 		plt.ylabel("target")
-		plt.title("Ensemble")
+		if title ==None:
+			plt.title("Ensemble")
+		else:
+			plt.title(title)
 		plt.legend()
 		plt.show()
 
@@ -162,11 +165,12 @@ class BaseEnsemble(object):
 
 		return {'rsme':rsme,
 				'coverage probability':cov_prob,
-			   'correlation between error and variance':err_var_corr,
+			  # 'correlation between error and variance':err_var_corr,
 				'NLPD':nlpd,
 			   #'predictive power of y on the uncertainty':y_uncertainty_pred,
 			   #'predictive power of y on the error': y_predicts_error,
-			   'error normalcy':target_error_normalcy}
+			   #'error normalcy':target_error_normalcy
+			   }
 
 
 
